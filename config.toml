@@ -1,0 +1,11 @@
+title = "The Goood Cookie"
+baseURL = "localhost:1313"
+[params]
+  email = "thegooodcookie@gmail.com"
+  address = "6244 Dalmarnock Cresent NW"
+  phone = "587 892 9353"
+  facebookUrl = "https://www.facebook.com/thegooodcookie"
+  instagramUrl = "https://www.instagram.com/thegooodcookie"
+  
+languageCode = "en-ca"
+disableKinds = ["section", "RSS", "taxonomy", "taxonomyTerm"]

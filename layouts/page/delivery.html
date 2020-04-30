@@ -1,0 +1,16 @@
+{{ define "main" }}
+
+<div class="form-wrapper">
+    <input class="autocomplete" placeholder="Enter your address" type="text" />
+    <div class="message-success">Congrats, You are within range!</div>
+    <div class="message-failure">Sorry, we cannot drive that far!</div>
+</div>
+<div id="map"></div>
+
+<script 
+    async
+    defer
+    type="text/javascript"
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyChBjfYOFaKe62rBUpayEbj0H4L-Vewq5I&libraries=places&callback=init"></script>
+
+{{ end }}

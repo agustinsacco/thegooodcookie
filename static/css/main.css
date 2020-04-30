@@ -1,0 +1,186 @@
+/*------------------------------
+    MAIN
+-------------------------------*/
+
+/* Optional: Makes the sample page fill the window. */
+
+html, body {
+	height: 100%;
+	margin: 0;
+	padding: 0;
+	background-color: #f6d4d2;
+	font-family: 'Abril Fatface', cursive;
+}
+
+header, footer {
+	position: fixed;
+	width: 100%;
+	z-index: 9999;
+}
+
+header {
+	top: 0;
+}
+
+footer {
+	bottom: 0;
+}
+
+.logo {
+	position: absolute;
+	left: 50%;
+	margin-left: -150px;
+	top: 50%;
+	margin-top: -127px;
+	width: 300px;
+	height: 254px;
+}
+
+.logo img {
+	width: 300px;
+	height: 254px;
+}
+
+.menu-item {
+	position: relative;
+	padding: 10px;
+}
+
+.menu-item a {
+	font-size: 20px;
+	color: rgb(49, 49, 49);
+	text-decoration: none;
+}
+
+.menu-item a.email {
+	font-size: 16px;
+	position: absolute;
+	bottom: 10px;
+	right: 10px;
+}
+
+.menu-item a img {
+	width: 44px;
+	margin-right: 5px;
+	margin-bottom: -6px;
+}
+
+.menu-item a:hover, .menu-item a:focus {
+	text-decoration: underline;
+}
+
+.text-right {
+	text-align: right;
+}
+
+.text-left {
+	text-align: left;
+}
+
+#map {
+	position: absolute;
+	height: 100%;
+	width: 100%;
+	z-index: 99;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+}
+
+.form-wrapper {
+	position: absolute;
+	top: 100px;
+	width: 100%;
+	z-index: 999;
+	text-align: center;
+}
+
+.message-success {
+	display: none;
+	font-size: 26px;
+	text-align: center;
+	color: rgb(0, 139, 0);
+	text-transform: uppercase;
+	font-weight: bold;
+	padding-top: 10px;
+}
+
+.message-failure {
+	display: none;
+	font-size: 26px;
+	text-align: center;
+	color: #f6d4d2;
+	text-transform: uppercase;
+	font-weight: bold;
+	padding-top: 10px;
+}
+
+.autocomplete {
+	width: 80%;
+	height: 60px;
+	background-color: #ffffff;
+	padding: 10px;
+	border-radius: 5px;
+	font-size: 24px;
+}
+
+/*------------------------------
+    PRELOADER
+-------------------------------*/
+
+.preeloader {
+	background: #f6d4d2 none repeat scroll 0 0;
+	height: 100%;
+	position: fixed;
+	width: 100%;
+	z-index: 999999;
+}
+
+.preloader-spinner {
+	-webkit-animation: 1s ease-out 0s normal none infinite running pulsate;
+	animation: 1s ease-out 0s normal none infinite running pulsate;
+	border: 5px solid #ffffff;
+	border-radius: 80px;
+	display: block;
+	height: 80px;
+	left: 50%;
+	margin: -20px 0 0 -40px;
+	opacity: 0;
+	position: fixed;
+	top: 50%;
+	width: 80px;
+	z-index: 10;
+}
+
+@keyframes pulsate {
+	0% {
+		opacity: 0;
+		-webkit-transform: scale(0.1);
+		transform: scale(0.1);
+	}
+	50% {
+		opacity: 1;
+	}
+	100% {
+		opacity: 0;
+		-webkit-transform: scale(1.2);
+		transform: scale(1.2);
+	}
+}
+
+@-webkit-keyframes pulsate {
+	0% {
+		opacity: 0;
+		-webkit-transform: scale(0.1);
+		transform: scale(0.1);
+	}
+	50% {
+		opacity: 1;
+	}
+	100% {
+		opacity: 0;
+		-webkit-transform: scale(1.2);
+		transform: scale(1.2);
+	}
+}
