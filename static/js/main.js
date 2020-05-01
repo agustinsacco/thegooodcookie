@@ -4,8 +4,6 @@ jQuery(document).on('ready', function ($) {
 
 }(jQuery));
 
-
-
 jQuery(window).on('load', function () {
 	"use strict";
 	/*--------------------------

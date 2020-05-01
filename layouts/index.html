@@ -1,7 +1,13 @@
 {{ define "main" }}
+
+{{- partial "header.html" . -}}
+
 <div class="logo">
     <a href="{{ .Site.Params.FacebookUrl }}">
         <img src="{{ "img/logo.jpeg" | relURL}}" />
     </a>
 </div>
+
+{{- partial "footer.html" . -}}
+
 {{ end }}

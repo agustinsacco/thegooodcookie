@@ -1,0 +1,119 @@
+{{ define "main" }}
+
+<div class="checkout-wrapper">
+    <h1>Checkout</h1>
+    <h3>- 1/2 dozen for $9</h3>
+    <h3>- 1 dozen for $15 (up to 2 choices)</h3>
+    <h3>- 15% of all orders are donated to local charities</h3>
+    <form class="checkout-form">
+    </form>
+
+    <div class="total">$0</div>
+    <button type="button" class="add-group">Add more cookies</button>
+    <div id="paypal-button-container"></div>
+</div>
+
+<script
+    src="https://www.paypal.com/sdk/js?currency=CAD&client-id=AfrNPJ9n88N5hyI484WY16hR5G91C1zR2Cwr6jVsCk3jUxqzYc7Kr_WAJd1FQHcTliN0xKZ4PGgB5MK3"> // Replace YOUR_SB_CLIENT_ID with your sandbox client ID
+    </script>
+<script>
+    jQuery(window).on('load', function () {
+        "use strict";
+
+        function addFormGroup() {
+            // Count how many form groups we have
+            const count = $('.checkout-form').find('.form-group').toArray().length + 1;
+            $('.checkout-form').append(`
+                <div class="form-group">
+                    <select name="cookie-type-${count}">
+                        <option disabled selected>Choose your cookie</option>
+                        <option value="Milk Chocolate">Milk Chocolate</option>
+                        <option value="White Chocolate">White Chocolate</option>
+                        <option value="Dark Chocolate">Dark Chocolate</option>
+                        <option value="M & M">M & M</option>
+                        <option value="Smores">Smores</option>
+                    </select>
+                    <select name="dozens-${count}">
+                        <option disabled selected>Quantity</option>
+                        <option value="0.5">1/2 Dozen</option>
+                        <option value="1">1 Dozen</option>
+                        <option value="2">2 Dozen</option>
+                        <option value="3">3 Dozen</option>
+                        <option value="4">4 Dozen</option>
+                    </select>
+                    <div class="divider"></div>
+                </div>`)
+        }
+
+        // Add the first group by default
+        addFormGroup();
+
+        function calculatePrice(data) {
+            var totalDozens = 0;
+            var totalCost = 0;
+
+            var dozenCost = 15;
+            var halfDozenCost = 9;
+
+            for (var x = 0; x < data.length; x++) {
+                const item = data[x];
+                if (item.name.indexOf('dozens-') !== -1) {
+                    totalDozens = totalDozens + (+item.value);
+                }
+            }
+
+            // If totalDozens is whole, we just multiply by dozen cost
+            if (Number.isInteger(totalDozens)) {
+                totalCost = totalDozens * dozenCost;
+            // If totalDozens is not whole, the last half dozen is charged halfDozenCost
+            } else {
+                totalCost = (Math.floor(totalDozens) * dozenCost) + halfDozenCost;
+            }
+
+            return {
+                dozens: totalDozens,
+                total: totalCost,
+            }
+        }
+
+        // Group addition
+        $('.add-group').click(function () {
+            addFormGroup();
+        });
+
+        // If select forms are changed, update total price
+        $('.checkout-form').on('change', 'select', function() {
+            const result = calculatePrice($('.checkout-form').serializeArray());
+            $('.checkout-wrapper .total').html(`$${result.total}`);
+        });
+
+        paypal.Buttons({
+            createOrder: function (data, actions) {
+                // This function sets up the details of the transaction, including the amount and line item details.
+                var result = calculatePrice($('.checkout-form').serializeArray());
+                var body = {
+                    intent: 'CAPTURE',
+                    purchase_units: [{
+                        amount: {
+                            currency_code: 'CAD',
+                            value: String(result.total) || 0
+                        }
+                    }]
+                };
+                console.log(body);
+                return actions.order.create(body);
+            },
+            onApprove: function (data, actions) {
+                // This function captures the funds from the transaction.
+                return actions.order.capture().then(function (details) {
+                    // This function shows a transaction success message to your buyer.
+                    alert('Transaction completed by ' + details.payer.name.given_name);
+                });
+            }
+        }).render('#paypal-button-container');
+    });    
+</script>
+
+{{- partial "footer.html" . -}}
+
+{{ end }}

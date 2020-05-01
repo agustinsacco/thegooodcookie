@@ -21,6 +21,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="{{ "css/bootstrap-grid.min.css" | relURL}}" />
     <link rel="stylesheet" type="text/css" href="{{ "css/main.css" | relURL}}" />
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
 </head>
 
 <body class="home-carousel">
@@ -28,12 +30,8 @@
     <div class="preeloader">
         <div class="preloader-spinner"></div>
     </div>
-    
-    {{- partial "header.html" . -}}
 
     {{- block "main" . }}{{- end }}
-
-    {{- partial "footer.html" . -}}
     
     {{- partial "scripts.html" . -}}
     
