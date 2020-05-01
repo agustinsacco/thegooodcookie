@@ -2,9 +2,9 @@
 
 <div class="checkout-wrapper">
     <h1>Checkout</h1>
-    <h3>- 1/2 dozen for $9</h3>
-    <h3>- 1 dozen for $15 (up to 2 choices)</h3>
-    <h3>- 15% of all orders are donated to local charities</h3>
+    <h4>- 1/2 dozen for $9</h4>
+    <h4>- 1 dozen for $15 (up to 2 choices)</h4>
+    <h4>- 15% of all orders are donated to local charities</h4>
     <form class="checkout-form">
     </form>
 
@@ -14,18 +14,21 @@
 </div>
 
 <script
-    src="https://www.paypal.com/sdk/js?currency=CAD&client-id=AfrNPJ9n88N5hyI484WY16hR5G91C1zR2Cwr6jVsCk3jUxqzYc7Kr_WAJd1FQHcTliN0xKZ4PGgB5MK3"> // Replace YOUR_SB_CLIENT_ID with your sandbox client ID
+    src="https://www.paypal.com/sdk/js?currency=CAD&client-id=AfaOSE_XfUDGQYuNRS6h5n926rmSDAzKblAhP0dVcRmELrfSYHkABK3YSAiadvXFNJ7Q7XgLOMUA2iiV"> // Replace YOUR_SB_CLIENT_ID with your sandbox client ID
     </script>
 <script>
     jQuery(window).on('load', function () {
         "use strict";
 
+        var dozenCost = 15;
+        var halfDozenCost = 9;
+
         function addFormGroup() {
             // Count how many form groups we have
-            const count = $('.checkout-form').find('.form-group').toArray().length + 1;
+            var count = $('.checkout-form').find('.form-group').toArray().length + 1;
             $('.checkout-form').append(`
                 <div class="form-group">
-                    <select name="cookie-type-${count}">
+                    <select name="type-${count}">
                         <option disabled selected>Choose your cookie</option>
                         <option value="Milk Chocolate">Milk Chocolate</option>
                         <option value="White Chocolate">White Chocolate</option>
@@ -48,15 +51,34 @@
         // Add the first group by default
         addFormGroup();
 
-        function calculatePrice(data) {
+        function calculateLineItems(data) {
+            var items = [];
+            var count = data.length;
+            var curr = 1;
+            for (var x = 0; x < data.length; x++) {
+                var item = data[x];
+                var nameSplit = item.name.split('-');
+                console.log(nameSplit);
+                const index = +nameSplit[1] - 1;
+                const key = nameSplit[0];
+                if (!items[index]) {
+                    items[index] = {};
+                }
+                console.log(items, index, items[index], key, item.value);
+                items[index][key] = item.value;
+            }
+
+            var finalItems = [];
+            console.log(items);
+        }
+
+        function calculateTotals(data) {
             var totalDozens = 0;
             var totalCost = 0;
 
-            var dozenCost = 15;
-            var halfDozenCost = 9;
-
             for (var x = 0; x < data.length; x++) {
-                const item = data[x];
+                var item = data[x];
+                // calculate dozens
                 if (item.name.indexOf('dozens-') !== -1) {
                     totalDozens = totalDozens + (+item.value);
                 }
@@ -65,7 +87,7 @@
             // If totalDozens is whole, we just multiply by dozen cost
             if (Number.isInteger(totalDozens)) {
                 totalCost = totalDozens * dozenCost;
-            // If totalDozens is not whole, the last half dozen is charged halfDozenCost
+                // If totalDozens is not whole, the last half dozen is charged halfDozenCost
             } else {
                 totalCost = (Math.floor(totalDozens) * dozenCost) + halfDozenCost;
             }
@@ -82,15 +104,17 @@
         });
 
         // If select forms are changed, update total price
-        $('.checkout-form').on('change', 'select', function() {
-            const result = calculatePrice($('.checkout-form').serializeArray());
+        $('.checkout-form').on('change', 'select', function () {
+            var form = $('.checkout-form').serializeArray();
+            var result = calculateTotals(form);
             $('.checkout-wrapper .total').html(`$${result.total}`);
         });
 
         paypal.Buttons({
             createOrder: function (data, actions) {
                 // This function sets up the details of the transaction, including the amount and line item details.
-                var result = calculatePrice($('.checkout-form').serializeArray());
+                var formData = $('.checkout-form').serializeArray();
+                var result = calculateTotals(formData);
                 var body = {
                     intent: 'CAPTURE',
                     purchase_units: [{
@@ -100,7 +124,6 @@
                         }
                     }]
                 };
-                console.log(body);
                 return actions.order.create(body);
             },
             onApprove: function (data, actions) {
