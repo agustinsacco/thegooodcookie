@@ -33,11 +33,11 @@ function initAutocomplete() {
                 var eligible = google.maps.geometry.poly.containsLocation(results[0].geometry.location, deliveryPerimiter)
                 console.log('found location', results[0], 'eligible: ' + eligible);
                 if (eligible) {
-                    document.getElementsByClassName('message-success')[0].style.display = 'block';
-                    document.getElementsByClassName('message-failure')[0].style.display = 'none';
+                    document.getElementsByClassName('success')[0].style.display = 'block';
+                    document.getElementsByClassName('failure')[0].style.display = 'none';
                 } else {
-                    document.getElementsByClassName('message-success')[0].style.display = 'none';
-                    document.getElementsByClassName('message-failure')[0].style.display = 'block';
+                    document.getElementsByClassName('success')[0].style.display = 'none';
+                    document.getElementsByClassName('failure')[0].style.display = 'block';
                 }
             }
         });
@@ -46,7 +46,7 @@ function initAutocomplete() {
 
 function initMap() {
     map = new google.maps.Map(document.getElementById('map'), {
-        zoom: 11.2,
+        zoom: 11.5,
         center: { lat: 45.502720, lng: -73.611732 },
         zoomControl: false,
         mapTypeControl: false,
