@@ -3,6 +3,7 @@ var deliveryPerimiter;
 var autocomplete;
 
 function init() {
+    console.log($);
     initMap();
     initAutocomplete();
 
@@ -12,7 +13,7 @@ function initAutocomplete() {
     // Create the autocomplete object, restricting the search predictions to
     // geographical location types.
     autocomplete = new google.maps.places.Autocomplete(
-        document.getElementsByClassName('autocomplete')[0], { types: ['geocode'] });
+        $('.delivery-wrapper .autocomplete')[0], { types: ['geocode'] });
 
     // Avoid paying for data that you don't need by restricting the set of
     // place fields that are returned to just the address components.
@@ -24,7 +25,7 @@ function initAutocomplete() {
         // Place finder
         var service = new google.maps.places.PlacesService(map);
         var request = {
-            query: document.getElementsByClassName('autocomplete')[0].value,
+            query: $('.delivery-wrapper .autocomplete').val(),
             fields: ['name', 'geometry'],
         };
         service.findPlaceFromQuery(request, function (results, status) {
@@ -33,11 +34,11 @@ function initAutocomplete() {
                 var eligible = google.maps.geometry.poly.containsLocation(results[0].geometry.location, deliveryPerimiter)
                 console.log('found location', results[0], 'eligible: ' + eligible);
                 if (eligible) {
-                    document.getElementsByClassName('success')[0].style.display = 'block';
-                    document.getElementsByClassName('failure')[0].style.display = 'none';
+                    $('.delivery-wrapper .success').show();
+                    $('.delivery-wrapper .failure').hide();
                 } else {
-                    document.getElementsByClassName('success')[0].style.display = 'none';
-                    document.getElementsByClassName('failure')[0].style.display = 'block';
+                    $('.delivery-wrapper .success').hide();
+                    $('.delivery-wrapper .failure').show();
                 }
             }
         });
@@ -45,7 +46,7 @@ function initAutocomplete() {
 }
 
 function initMap() {
-    map = new google.maps.Map(document.getElementById('map'), {
+    map = new google.maps.Map($('#map')[0], {
         zoom: 11.5,
         center: { lat: 45.502720, lng: -73.611732 },
         zoomControl: false,
