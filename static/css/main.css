@@ -81,12 +81,17 @@ footer {
 	padding: 40px 20px 40px 20px;
 }
 
+.checkout-wrapper table {
+	width: 100%;
+	margin-bottom: 20px;
+}
 
 .checkout-wrapper h1 {
 	margin-top: 0;
+	text-align: center;
 }
 
-.checkout-wrapper h4 {
+.checkout-wrapper h2, h3, h4, h5 {
 	font-family: 'Open Sans', sans-serif;
 	text-transform: uppercase;
 }
