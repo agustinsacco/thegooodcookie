@@ -6,8 +6,8 @@ baseURL = "localhost:1313"
   phone = "587 892 9353"
   facebookUrl = "https://www.facebook.com/thegooodcookie"
   instagramUrl = "https://www.instagram.com/thegooodcookie"
-  clientId = "Abpj0N9cWAk4XqmQGQUzEpWmqtWukWw09XKVIC_Aim0kAvbB9eAs4sgUoMQR3HXU7vc_sUDfBdsTIdva"
-  cliendIdSandbox = "AfaOSE_XfUDGQYuNRS6h5n926rmSDAzKblAhP0dVcRmELrfSYHkABK3YSAiadvXFNJ7Q7XgLOMUA2iiV"
+  clientId = "AdQFyHbXNX1vNjqBAkGhzDnN4-kO73Gy5AixNl6iXAiEF2piX71YijTrO_g5ovIIMpqCR7cZW9G6PPt2"
+  clientIdSandbox = "AfaOSE_XfUDGQYuNRS6h5n926rmSDAzKblAhP0dVcRmELrfSYHkABK3YSAiadvXFNJ7Q7XgLOMUA2iiV"
   
 languageCode = "en-ca"
 disableKinds = ["section", "RSS", "taxonomy", "taxonomyTerm"]
