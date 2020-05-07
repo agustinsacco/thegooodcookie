@@ -94,7 +94,6 @@ jQuery(window).on('load', function () {
 
         // Get tip if set
         const tip = +($('.tip').val());
-        console.log(tip);
         if (tip && tip > 0) {
             totals.total += tip;
             lineItems.push({
