@@ -14,9 +14,6 @@ jQuery(window).on('load', function () {
         {
             type: 'M & M',
         },
-        {
-            type: 'Caramel Crazy',
-        }
     ];
     let dozenCost = 15;
     let halfDozenCost = 10;
