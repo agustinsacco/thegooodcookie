@@ -17,8 +17,7 @@ jQuery(window).on('load', function () {
         {
             type: 'Caramel Crazy',
         }
-    ]
-
+    ];
     let dozenCost = 15;
     let halfDozenCost = 10;
 
@@ -30,8 +29,8 @@ jQuery(window).on('load', function () {
             options = `${options}<option value="${cookie.type}">${cookie.type}</option>`
         }
         $('.checkout-form').append(`
-            <div class="form-group">
-                <select name="type-${count}">
+            <div class="form-group margin-bottom-20">
+                <select name="type-${count}" class="margin-bottom-20">
                     <option disabled selected>Choose your cookie</option>
                     ${options}
                 </select>
@@ -40,12 +39,8 @@ jQuery(window).on('load', function () {
                     <option value="0.5">1/2 Dozen</option>
                     <option value="1">1 Dozen</option>
                 </select>
-                <div class="divider"></div>
             </div>`);
     }
-
-    // Add the first group by default
-    addFormGroup();
 
     function getFormItems(data) {
         let items = [];
@@ -81,6 +76,7 @@ jQuery(window).on('load', function () {
             totalDozens += +item.dozens;
         }
 
+        // Not used for now
         const pricePerCookie = totals.total / (totals.dozens * 12)
 
         let lineItems = [];
@@ -96,9 +92,25 @@ jQuery(window).on('load', function () {
             });
         }
 
+        // Get tip if set
+        const tip = +($('.tip').val());
+        console.log(tip);
+        if (tip && tip > 0) {
+            totals.total += tip;
+            lineItems.push({
+                name: 'Tip',
+                unit_amount: {
+                    currency_code: 'CAD',
+                    value: '0',
+                },
+                quantity: 1,
+            });
+        }
+
         return {
             total: totals.total,
             dozens: totals.dozens,
+            tip: tip,
             items: lineItems
         };
     }
@@ -125,28 +137,22 @@ jQuery(window).on('load', function () {
         }
     }
 
-    // Group addition
-    $('.add-group').click(function () {
-        addFormGroup();
-    });
-
-    $('h1').click(function () {
+    function updateTotal() {
         let formData = $('.checkout-form').serializeArray();
-        let lineItems = calculateLineItems(formData);
-    });
-
-    // If select forms are changed, update total price
-    $('.checkout-form').on('change', 'select', function () {
-        let formData = $('.checkout-form').serializeArray();
-        let items = calculateLineItems(formData)
+        let items = calculateLineItems(formData);
         $('.checkout-wrapper .total').html(`$${items.total}`);
-    });
+    }
+
+    function getDescription() {
+        return `Delivery: ${$('.delivery-date').val()} - Tip: ${+$('.tip').val()} - Notes: ${$('.instructions').val()}`
+    }
 
     paypal.Buttons({
         createOrder: function (data, actions) {
             // This function sets up the details of the transaction, including the amount and line item details.
             let formData = $('.checkout-form').serializeArray();
             let items = calculateLineItems(formData);
+            let description = getDescription();
             let body = {
                 intent: 'CAPTURE',
                 purchase_units: [{
@@ -155,9 +161,9 @@ jQuery(window).on('load', function () {
                         value: String(items.total),
                     },
                     items: items.items,
+                    description: description
                 }],
             };
-            console.log(body);
             return actions.order.create(body);
         },
         onApprove: function (data, actions) {
@@ -172,4 +178,36 @@ jQuery(window).on('load', function () {
             });
         }
     }).render('#paypal-button-container');
+
+    // MAIN
+
+    // Handlers
+
+    // Group addition
+    $('.add-group').click(function () {
+        addFormGroup();
+    });
+
+    // Tester function
+    $('h1').click(function () {
+        let formData = $('.checkout-form').serializeArray();
+        let result = calculateLineItems(formData);
+        let description = getDescription();
+        console.log(result, description);
+    });
+
+    // If select forms are changed, update total price
+    $('.checkout-form').on('change', 'select', function () {
+        updateTotal();
+    });
+
+    $('.tip').change(function () {
+        updateTotal();
+    });
+
+    // Set today as default delivery date
+    $('.delivery-date').val(new Date().toISOString().slice(0, 10));
+
+    // Add the first group by default
+    addFormGroup();
 });
