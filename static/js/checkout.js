@@ -14,6 +14,9 @@ jQuery(window).on('load', function () {
         {
             type: 'M & M',
         },
+        {
+            type: 'KitKat',
+        },
     ];
     let dozenCost = 15;
     let halfDozenCost = 10;
