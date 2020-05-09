@@ -12,7 +12,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Good cookies for good causes" />
-    <meta name="keywords" content="cookies, montreal, good cookies,the good cookie, the goood cookie, gourmet cookies, cookie delivery, delivery" />
+    <meta name="keywords"
+        content="cookies, montreal, good cookies,the good cookie, the goood cookie, gourmet cookies, cookie delivery, delivery" />
     <meta name="author" content="BDEXPERT" />
 
     <title>{{ .Title }} | {{ .Site.Title }}</title>
@@ -24,6 +25,16 @@
     <link rel="stylesheet" type="text/css" href="{{ "css/main.css" | relURL}}" />
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id={{ .Site.Params.gaTag }}"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', "{{ .Site.Params.gaTag }}");
+    </script>
+
+
 </head>
 
 <body class="home-carousel">
@@ -33,9 +44,9 @@
     </div>
 
     {{- block "main" . }}{{- end }}
-    
+
     {{- partial "scripts.html" . -}}
-    
+
 </body>
 
 </html>

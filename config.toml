@@ -8,6 +8,7 @@ baseURL = "localhost:1313"
   instagramUrl = "https://www.instagram.com/thegooodcookie"
   clientId = "AdQFyHbXNX1vNjqBAkGhzDnN4-kO73Gy5AixNl6iXAiEF2piX71YijTrO_g5ovIIMpqCR7cZW9G6PPt2"
   clientIdSandbox = "AfaOSE_XfUDGQYuNRS6h5n926rmSDAzKblAhP0dVcRmELrfSYHkABK3YSAiadvXFNJ7Q7XgLOMUA2iiV"
+  gaTag = "UA-165969935-1"
   
 languageCode = "en-ca"
 disableKinds = ["section", "RSS", "taxonomy", "taxonomyTerm"]
