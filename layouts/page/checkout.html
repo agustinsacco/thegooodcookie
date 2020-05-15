@@ -1,50 +1,57 @@
 {{ define "main" }}
 
-<div class="checkout-wrapper">
-    <h1>Checkout</h1>
+{{ if eq .Site.Params.tmpClosed "true" }}
+    <div class="checkout-wrapper" style="text-align:center;">
+        <h1>Temporarily closed</h1>
+        <h4>Sorry! We are temporarily closed for the long weekend.</h4>
+    </div>
+{{ else }}
+    <div class="checkout-wrapper">
+        <h1>Checkout</h1>
 
-    <h4>♡ Order before 11am for same day delivery (between 2-5pm)</h4>
-    <h4>♡ 10% of all orders are donated to local charities</h4>
+        <h4>♡ Order before 11am for same day delivery (between 2-5pm)</h4>
+        <h4>♡ 10% of all orders are donated to local charities</h4>
 
-    <table>
-        <tr>
-            <td>1/2 dozen</td>
-            <td align="right">$10</td>
-        </tr>
-        <tr>
-            <td>1 dozen</td>
-            <td align="right">$15</td>
-        </tr>
-    </table>
+        <table>
+            <tr>
+                <td>1/2 dozen</td>
+                <td align="right">$10</td>
+            </tr>
+            <tr>
+                <td>1 dozen</td>
+                <td align="right">$15</td>
+            </tr>
+        </table>
 
-    <div class="box">
-        <div class="title margin-bottom-20">Add cookies to your order</div>
-        <form class="checkout-form"></form>
-        <button type="button" class="add-group"><strong>+</strong> Add more</button>
+        <div class="box">
+            <div class="title margin-bottom-20">Add cookies to your order</div>
+            <form class="checkout-form"></form>
+            <button type="button" class="add-group"><strong>+</strong> Add more</button>
+        </div>
+
+        <div class="box">
+            <div class="title margin-bottom-20">Choose your delivery date</div>
+            <input type="date" class="delivery-date" />
+            <div class="title margin-bottom-20 margin-top-20">Tip</div>
+            <input type="number" class="tip" value="0" />
+            <div class="title margin-bottom-20 margin-top-20">Instructions/Notes</div>
+            <input type="text" class="instructions" maxlength="70" />
+        </div>
+
+        <table>
+            <tr>
+                <td class="total-title">Total</td>
+                <td align="right"><div class="total">$0</div></td>
+            </tr>
+        </table>
+
+        <div id="paypal-button-container"></div>
     </div>
 
-    <div class="box">
-        <div class="title margin-bottom-20">Choose your delivery date</div>
-        <input type="date" class="delivery-date" />
-        <div class="title margin-bottom-20 margin-top-20">Tip</div>
-        <input type="number" class="tip" value="0" />
-        <div class="title margin-bottom-20 margin-top-20">Instructions/Notes</div>
-        <input type="text" class="instructions" maxlength="70" />
-    </div>
-
-    <table>
-        <tr>
-            <td class="total-title">Total</td>
-            <td align="right"><div class="total">$0</div></td>
-        </tr>
-    </table>
-
-    <div id="paypal-button-container"></div>
-</div>
-
-<script src="https://www.paypal.com/sdk/js?currency=CAD&client-id={{ .Site.Params.clientId }}"> // Replace YOUR_SB_CLIENT_ID with your sandbox client ID
-</script>
-<script type="text/javascript" src="{{"js/checkout.js" | relURL}}"></script>
+    <script src="https://www.paypal.com/sdk/js?currency=CAD&client-id={{ .Site.Params.clientId }}"> // Replace YOUR_SB_CLIENT_ID with your sandbox client ID
+    </script>
+    <script type="text/javascript" src="{{"js/checkout.js" | relURL}}"></script>
+{{ end }}
 
 {{- partial "footer.html" . -}}
 
