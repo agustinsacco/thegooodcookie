@@ -5,14 +5,21 @@
 <div class="delivery-wrapper">
     <div class="autocomplete-wrapper">
         <input class="autocomplete" placeholder="Enter your address" type="text" />
-    </div>    
+    </div>
     <div class="success">We can delivery to you!</div>
     <div class="failure">Sorry, we cannot drive that far!</div>
 </div>
 <div id="map"></div>
 
 
-<script type="text/javascript" src="{{"js/delivery.js" | relURL}}"></script>
+<script type="text/javascript" src="{{"js/map.js" | relURL}}"></script>
+<script type="text/javascript" src="{{"js/autocomplete.js" | relURL}}"></script>
+<script type="text/javascript">
+    function init() {
+        initMap();
+        initAutocomplete();
+    }
+</script>
 <script async defer type="text/javascript"
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyChBjfYOFaKe62rBUpayEbj0H4L-Vewq5I&libraries=places&callback=init"></script>
 

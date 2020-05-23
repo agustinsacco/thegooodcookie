@@ -6,7 +6,7 @@ jQuery(window).on('load', function () {
             type: 'Milk Chocolate',
         },
         {
-            type: 'White Chocolate',
+            type: 'Nutella Chocolate',
         },
         {
             type: 'Dark Chocolate',
@@ -143,7 +143,7 @@ jQuery(window).on('load', function () {
     }
 
     function getDescription() {
-        return `Delivery: ${$('.delivery-date').val()} - Tip: ${+$('.tip').val()} - Notes: ${$('.instructions').val()}`;
+        return `Delivery: ${$('.delivery-date').val()} - Pickup: ${$('.pickup').is(":checked") ? 'yes' : 'no'} - Tip: ${+$('.tip').val()} - Notes: ${$('.instructions').val()}`;
     }
 
     paypal.Buttons({
@@ -152,27 +152,15 @@ jQuery(window).on('load', function () {
             console.log('Creating the order bro')
             let formData = $('.checkout-form').serializeArray();
             let order = getOrder(formData);
-            // If order has items AND pickup is checked or address is valid
-            if (
-                (order.total > 0 && order.items.length > 0) &&
-                ($('.pickup').is(':checked') || (!$('.pickup').is(':checked') && $('.success').is(":visible")))
-            ) {
-                console.log('Order is valid!');
+
+            // If order 
+            if (order.total === 0 && order.items.length === 0) {
+                $('.form-errors').html('<h3>Please add some cookies to your order.</h3>');
+                return false;
             } else {
-                // actions.disable();errors
-                $('.form-errors').html('<h3>Please add items to your order and add valid delivery address or pick up option.</h3>');
-                console.log('Order is NOT valid', actions);
-                return actions;
+                $('.form-errors').html('');
             }
 
-            const addressSplit = $('.autocomplete').val().split(', ');
-            const address = {   
-                address_line_1: addressSplit[0],  
-                admin_area_1: 'QC',
-                admin_area_2: 'Montreal',
-                country_code: 'CA',
-
-            }
             let description = getDescription();
             let body = {
                 intent: 'CAPTURE',
@@ -181,17 +169,9 @@ jQuery(window).on('load', function () {
                         currency_code: 'CAD',
                         value: String(order.total),
                     },
-                    shipping: {
-                        _detail: {
-                            address_portable: address
-                        },
-                        _type: $(this).is(':checked') ? 'PICKUP' : 'SHIPPING'
-                    },
                     items: order.items,
+                    soft_descriptor: 'THEGOOODCOOKIE',
                     description: description,
-                    order_application_context: {
-                        shipping_preference: 'SET_PROVIDED_ADDRESS'
-                    },
                 }],
             };
             console.log(body);
@@ -207,6 +187,33 @@ jQuery(window).on('load', function () {
                     <h5 align="center">Contact us via instagram or facebook for specific delivery instructions.</h5>
                 `);
             });
+        },
+        onShippingChange: function (data, actions) {
+            // If map is available and not set for pickup
+            if (map && !$('.pickup').is(":checked")) {
+                var service = new google.maps.places.PlacesService(map);
+                var request = {
+                    query: data.shipping_address.postal_code, // Search by postal code
+                    fields: ['name', 'geometry'],
+                };
+                service.findPlaceFromQuery(request, function (results, status) {
+                    if (status === google.maps.places.PlacesServiceStatus.OK) {
+                        // Check if within perimiter
+                        var eligible = google.maps.geometry.poly.containsLocation(results[0].geometry.location, deliveryPerimiter)
+                        console.log('Found location', results[0], 'eligible: ' + eligible);
+                        if (eligible) {
+                            console.log('Order shipping address is valid!');
+                            return actions.resolve();
+                        } else {
+                            console.log('Order shipping address is NOT valid.');
+                            return actions.reject();
+                        }
+                    }
+                });
+            } else {
+                console.log('Order for pickup, skipping address check');
+            }
+            return actions.resolve();
         },
         onError: function (err) {
             console.log(err);
@@ -238,17 +245,6 @@ jQuery(window).on('load', function () {
 
     $('.tip').change(function () {
         updateTotal();
-    });
-
-    // Pick up options
-    $('.pickup').change(function (event) {
-        // If checkbox is set 
-        console.log($(this).is(':checked'));
-        if ($(this).is(':checked')) {
-            $('.order-for-delivery').hide();
-        } else {
-            $('.order-for-delivery').show();
-        }
     });
 
     // Set today as default delivery date
