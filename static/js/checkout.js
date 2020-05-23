@@ -67,7 +67,7 @@ jQuery(window).on('load', function () {
         return finalItems;
     }
 
-    function calculateLineItems(data) {
+    function getOrder(data) {
         let items = getFormItems(data);
         let totals = getTotalBreakdown(items);
         let totalDozens = 0;
@@ -138,31 +138,63 @@ jQuery(window).on('load', function () {
 
     function updateTotal() {
         let formData = $('.checkout-form').serializeArray();
-        let items = calculateLineItems(formData);
+        let items = getOrder(formData);
         $('.checkout-wrapper .total').html(`$${items.total}`);
     }
 
     function getDescription() {
-        return `Delivery: ${$('.delivery-date').val()} - Tip: ${+$('.tip').val()} - Notes: ${$('.instructions').val()}`
+        return `Delivery: ${$('.delivery-date').val()} - Tip: ${+$('.tip').val()} - Notes: ${$('.instructions').val()}`;
     }
 
     paypal.Buttons({
         createOrder: function (data, actions) {
             // This function sets up the details of the transaction, including the amount and line item details.
+            console.log('Creating the order bro')
             let formData = $('.checkout-form').serializeArray();
-            let items = calculateLineItems(formData);
+            let order = getOrder(formData);
+            // If order has items AND pickup is checked or address is valid
+            if (
+                (order.total > 0 && order.items.length > 0) &&
+                ($('.pickup').is(':checked') || (!$('.pickup').is(':checked') && $('.success').is(":visible")))
+            ) {
+                console.log('Order is valid!');
+            } else {
+                // actions.disable();errors
+                $('.form-errors').html('<h3>Please add items to your order and add valid delivery address or pick up option.</h3>');
+                console.log('Order is NOT valid', actions);
+                return actions;
+            }
+
+            const addressSplit = $('.autocomplete').val().split(', ');
+            const address = {   
+                address_line_1: addressSplit[0],  
+                admin_area_1: 'QC',
+                admin_area_2: 'Montreal',
+                country_code: 'CA',
+
+            }
             let description = getDescription();
             let body = {
                 intent: 'CAPTURE',
                 purchase_units: [{
                     amount: {
                         currency_code: 'CAD',
-                        value: String(items.total),
+                        value: String(order.total),
                     },
-                    items: items.items,
-                    description: description
+                    shipping: {
+                        _detail: {
+                            address_portable: address
+                        },
+                        _type: $(this).is(':checked') ? 'PICKUP' : 'SHIPPING'
+                    },
+                    items: order.items,
+                    description: description,
+                    order_application_context: {
+                        shipping_preference: 'SET_PROVIDED_ADDRESS'
+                    },
                 }],
             };
+            console.log(body);
             return actions.order.create(body);
         },
         onApprove: function (data, actions) {
@@ -175,6 +207,10 @@ jQuery(window).on('load', function () {
                     <h5 align="center">Contact us via instagram or facebook for specific delivery instructions.</h5>
                 `);
             });
+        },
+        onError: function (err) {
+            console.log(err);
+            return true;
         }
     }).render('#paypal-button-container');
 
@@ -190,7 +226,7 @@ jQuery(window).on('load', function () {
     // Tester function
     $('h1').click(function () {
         let formData = $('.checkout-form').serializeArray();
-        let result = calculateLineItems(formData);
+        let result = getOrder(formData);
         let description = getDescription();
         console.log(result, description);
     });
@@ -202,6 +238,17 @@ jQuery(window).on('load', function () {
 
     $('.tip').change(function () {
         updateTotal();
+    });
+
+    // Pick up options
+    $('.pickup').change(function (event) {
+        // If checkbox is set 
+        console.log($(this).is(':checked'));
+        if ($(this).is(':checked')) {
+            $('.order-for-delivery').hide();
+        } else {
+            $('.order-for-delivery').show();
+        }
     });
 
     // Set today as default delivery date

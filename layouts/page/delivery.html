@@ -3,7 +3,9 @@
 {{- partial "delivery-header.html" . -}}
 
 <div class="delivery-wrapper">
-    <input class="autocomplete" placeholder="Enter your address" type="text" />
+    <div class="autocomplete-wrapper">
+        <input class="autocomplete" placeholder="Enter your address" type="text" />
+    </div>    
     <div class="success">We can delivery to you!</div>
     <div class="failure">Sorry, we cannot drive that far!</div>
 </div>

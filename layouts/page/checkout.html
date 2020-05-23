@@ -1,56 +1,78 @@
 {{ define "main" }}
 
 {{ if eq .Site.Params.tmpClosed "true" }}
-    <div class="checkout-wrapper" style="text-align:center;">
-        <h1>Temporarily closed</h1>
-        <h4>Sorry! We are temporarily closed for the long weekend.</h4>
-    </div>
+<div class="checkout-wrapper" style="text-align:center;">
+    <h1>Temporarily closed</h1>
+    <h4>Sorry! We are temporarily closed for the long weekend.</h4>
+</div>
 {{ else }}
-    <div class="checkout-wrapper">
-        <h1>Checkout</h1>
+<div class="checkout-wrapper">
+    <h1>Checkout</h1>
 
-        <h4>♡ Order before 11am for same day delivery (between 2-5pm)</h4>
-        <h4>♡ 10% of all orders are donated to local charities</h4>
+    <h4>♡ Order before 11am for same day delivery (between 2-5pm)</h4>
+    <h4>♡ 10% of all orders are donated to local charities</h4>
 
-        <table>
-            <tr>
-                <td>1/2 dozen</td>
-                <td align="right">$10</td>
-            </tr>
-            <tr>
-                <td>1 dozen</td>
-                <td align="right">$15</td>
-            </tr>
-        </table>
+    <table>
+        <tr>
+            <td>1/2 dozen</td>
+            <td align="right">$10</td>
+        </tr>
+        <tr>
+            <td>1 dozen</td>
+            <td align="right">$15</td>
+        </tr>
+    </table>
 
-        <div class="box">
-            <div class="title margin-bottom-20">Add cookies to your order</div>
-            <form class="checkout-form"></form>
-            <button type="button" class="add-group"><strong>+</strong> Add more</button>
-        </div>
-
-        <div class="box">
-            <div class="title margin-bottom-20">Choose your delivery date</div>
-            <input type="date" class="delivery-date" />
-            <div class="title margin-bottom-20 margin-top-20">Tip</div>
-            <input type="number" class="tip" value="0" />
-            <div class="title margin-bottom-20 margin-top-20">Instructions/Notes</div>
-            <input type="text" class="instructions" maxlength="70" />
-        </div>
-
-        <table>
-            <tr>
-                <td class="total-title">Total</td>
-                <td align="right"><div class="total">$0</div></td>
-            </tr>
-        </table>
-
-        <div id="paypal-button-container"></div>
+    <div class="box">
+        <div class="step">STEP 1</div>
+        <div class="title margin-bottom-20">Add cookies to your order</div>
+        <form class="checkout-form"></form>
+        <button type="button" class="add-group"><strong>+</strong> Add more</button>
     </div>
 
-    <script src="https://www.paypal.com/sdk/js?currency=CAD&client-id={{ .Site.Params.clientId }}"> // Replace YOUR_SB_CLIENT_ID with your sandbox client ID
-    </script>
-    <script type="text/javascript" src="{{"js/checkout.js" | relURL}}"></script>
+    <div class="box">
+        <div class="step">STEP 2</div>
+        <div class="title margin-bottom-20 margin-top-20">When is the order for?</div>
+        <input type="date" class="delivery-date" />
+
+        <div class="title margin-top-20">Is this order for pickup? <input type="checkbox" class="pickup"></div>
+
+        <div class="order-for-delivery">
+            <div class="title margin-bottom-20 margin-top-20">If not, please enter your delivery address.</div>
+            <input class="autocomplete" placeholder="Enter your address" type="text" />
+            <div class="success">We can delivery to you!</div>
+            <div class="failure">Sorry, we cannot drive that far. But you can still choose pickup!</div>
+        </div>
+    </div>
+
+    <div class="box">
+        <div class="step">STEP 3</div>
+        <div class="title margin-bottom-20 margin-top-20">Tip</div>
+        <input type="number" class="tip" value="0" />
+        <div class="title margin-bottom-20 margin-top-20">Instructions/Notes</div>
+        <input type="text" class="instructions" maxlength="70" />
+    </div>
+
+    <table>
+        <tr>
+            <td class="total-title">Total</td>
+            <td align="right">
+                <div class="total">$0</div>
+            </td>
+        </tr>
+    </table>
+    <div class="form-errors"></div>
+    <div id="paypal-button-container"></div>
+</div>
+
+<div id="map" style="display:none;"></div>
+
+<script src="https://www.paypal.com/sdk/js?currency=CAD&client-id={{ .Site.Params.clientId }}"> // Replace YOUR_SB_CLIENT_ID with your sandbox client ID
+</script>
+<script type="text/javascript" src="{{"js/checkout.js" | relURL}}"></script>
+<script type="text/javascript" src="{{"js/delivery.js" | relURL}}"></script>
+<script async defer type="text/javascript"
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyChBjfYOFaKe62rBUpayEbj0H4L-Vewq5I&libraries=places&callback=init"></script>
 {{ end }}
 
 {{- partial "footer.html" . -}}

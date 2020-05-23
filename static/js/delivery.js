@@ -3,17 +3,15 @@ var deliveryPerimiter;
 var autocomplete;
 
 function init() {
-    console.log($);
     initMap();
     initAutocomplete();
-
 }
 
 function initAutocomplete() {
     // Create the autocomplete object, restricting the search predictions to
     // geographical location types.
     autocomplete = new google.maps.places.Autocomplete(
-        $('.delivery-wrapper .autocomplete')[0], { types: ['geocode'] });
+        $('.autocomplete')[0], { types: ['geocode'] });
 
     // Avoid paying for data that you don't need by restricting the set of
     // place fields that are returned to just the address components.
@@ -25,8 +23,8 @@ function initAutocomplete() {
         // Place finder
         var service = new google.maps.places.PlacesService(map);
         var request = {
-            query: $('.delivery-wrapper .autocomplete').val(),
-            fields: ['name', 'geometry'],
+            query: $('.autocomplete').val(),
+            fields: ['name', 'formatted_address', 'geometry'],
         };
         service.findPlaceFromQuery(request, function (results, status) {
             if (status === google.maps.places.PlacesServiceStatus.OK) {
@@ -34,11 +32,11 @@ function initAutocomplete() {
                 var eligible = google.maps.geometry.poly.containsLocation(results[0].geometry.location, deliveryPerimiter)
                 console.log('found location', results[0], 'eligible: ' + eligible);
                 if (eligible) {
-                    $('.delivery-wrapper .success').show();
-                    $('.delivery-wrapper .failure').hide();
+                    $('.success').show();
+                    $('.failure').hide();
                 } else {
-                    $('.delivery-wrapper .success').hide();
-                    $('.delivery-wrapper .failure').show();
+                    $('.success').hide();
+                    $('.failure').show();
                 }
             }
         });

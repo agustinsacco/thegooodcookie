@@ -22,6 +22,11 @@ select, input {
 	border: 2px solid rgb(49, 49, 49);
 }
 
+input[type='checkbox'] {
+	height: 15px;
+	width: 15px;
+}
+
 .margin-bottom-20 {
 	margin-bottom: 20px;
 }
@@ -55,6 +60,12 @@ footer {
 
 .box .title {
 	text-align: center;
+}
+
+.box .step {
+	position: absolute;
+	left: 3;
+	top: 3;
 }
 
 .logo {
@@ -181,37 +192,29 @@ footer {
 	text-align: center;
 }
 
-.delivery-wrapper .success {
+.success, .failure {
 	display: none;
-	font-size: 22px;
+	font-size: 20px;
 	text-align: center;
 	font-family: 'Abril Fatface', cursive;
-	color: #2b9122;
 	text-transform: uppercase;
-	font-weight: bold;
+	font-weight: 600;
 	padding-top: 10px;
 }
-
-.delivery-wrapper .failure {
-	display: none;
-	font-size: 22px;
-	text-align: center;
-	font-family: 'Abril Fatface', cursive;
-	font-weight: bold;
+.success {
+	color: #ac706d;
+}
+.failure {
 	color: #000000;
-	text-transform: uppercase;
-	padding-top: 20px;
 }
 
-.delivery-wrapper .autocomplete {
+.form-errors {
+	color: #99615f;
+}
+
+.autocomplete-wrapper {
 	width: 80%;
-	height: 60px;
-	font-family: 'Abril Fatface', cursive;
-	font-size: 18px;
-	color: rgb(49, 49, 49);
-	background-color: #ffffff;
-	border: 2px solid rgb(49, 49, 49);
-	padding: 10px;
+	margin: 0 auto;
 }
 
 /*------------------------------
