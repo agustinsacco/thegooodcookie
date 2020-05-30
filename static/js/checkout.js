@@ -6,6 +6,9 @@ jQuery(window).on('load', function () {
             type: 'Milk Chocolate',
         },
         {
+            type: 'White Chocolate',
+        },
+        {
             type: 'Nutella Chocolate',
         },
         {
