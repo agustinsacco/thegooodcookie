@@ -149,7 +149,7 @@ jQuery(window).on('load', function () {
     paypal.Buttons({
         createOrder: function (data, actions) {
             // This function sets up the details of the transaction, including the amount and line item details.
-            console.log('Creating the order bro')
+            console.log('Creating the order bro', data)
             let formData = $('.checkout-form').serializeArray();
             let order = getOrder(formData);
 
@@ -178,40 +178,31 @@ jQuery(window).on('load', function () {
             return actions.order.create(body);
         },
         onApprove: function (data, actions) {
-            // This function captures the funds from the transaction.
-            return actions.order.capture().then(function (details) {
-                // Clear checkout wrapper and add confirmation messages
-                $('.checkout-wrapper').html(`
+            console.log(data, actions);
+            actions.order.get().then(function (orderDetails) {
+                console.log(actions, orderDetails);
+                // Cancel order if shipping address is not valid
+                if (!isShippingValid(orderDetails.purchase_units[0].shipping.address)) {
+                    // Restart
+                    console.log('Shipping address is not valid, exiting!');
+                    $('.form-errors').html('<h3>Please add a valid shipping address to your order.</h3>');
+                    return;
+                }
+                // This function captures the funds from the transaction.
+                return actions.order.capture().then(function (details) {
+                    // Clear checkout wrapper and add confirmation messages
+                    $('.checkout-wrapper').html(`
                     <h3 align="center">Payment successful!</h align="center">
                     <h4 align="center">We will contact you when your cookies are being delivered.</h4>
                     <h5 align="center">Contact us via instagram or facebook for specific delivery instructions.</h5>
                 `);
+                });
             });
         },
         onShippingChange: function (data, actions) {
-            // If map is available and not set for pickup
-            if (map && !$('.pickup').is(":checked")) {
-                var service = new google.maps.places.PlacesService(map);
-                var request = {
-                    query: data.shipping_address.postal_code, // Search by postal code
-                    fields: ['name', 'geometry'],
-                };
-                service.findPlaceFromQuery(request, function (results, status) {
-                    if (status === google.maps.places.PlacesServiceStatus.OK) {
-                        // Check if within perimiter
-                        var eligible = google.maps.geometry.poly.containsLocation(results[0].geometry.location, deliveryPerimiter)
-                        console.log('Found location', results[0], 'eligible: ' + eligible);
-                        if (eligible) {
-                            console.log('Order shipping address is valid!');
-                            return actions.resolve();
-                        } else {
-                            console.log('Order shipping address is NOT valid.');
-                            return actions.reject();
-                        }
-                    }
-                });
-            } else {
-                console.log('Order for pickup, skipping address check');
+            // IF shipping address is NOTvalid
+            if (!isShippingValid(data.shipping_address)) {
+                return actions.reject();
             }
             return actions.resolve();
         },
@@ -220,6 +211,62 @@ jQuery(window).on('load', function () {
             return true;
         }
     }).render('#paypal-button-container');
+
+    function isShippingValid(address) {
+        // If map is available and not set for pickup, shipping is "valid"
+        if (map && !$('.pickup').is(":checked")) {
+            var service = new google.maps.places.PlacesService(map);
+            var request = {
+                query: address.postal_code, // Search by postal code
+                fields: ['name', 'geometry'],
+            };
+            service.findPlaceFromQuery(request, function (results, status) {
+                if (status === google.maps.places.PlacesServiceStatus.OK) {
+                    // Check if within perimiter
+                    var eligible = google.maps.geometry.poly.containsLocation(results[0].geometry.location, deliveryPerimiter)
+                    console.log('Found location', results[0], 'eligible: ' + eligible);
+                    if (eligible) {
+                        console.log('Order shipping address is valid!');
+                        return true;
+                    } else {
+                        console.log('Order shipping address is NOT valid.');
+                        return false;
+                    }
+                }
+            });
+        } else {
+            console.log('Order for pickup, skipping address check');
+        }
+        return true;
+    }
+
+    function checkShippingAddress(data, actions) {
+        // If map is available and not set for pickup
+        if (map && !$('.pickup').is(":checked")) {
+            var service = new google.maps.places.PlacesService(map);
+            var request = {
+                query: data.shipping_address.postal_code, // Search by postal code
+                fields: ['name', 'geometry'],
+            };
+            service.findPlaceFromQuery(request, function (results, status) {
+                if (status === google.maps.places.PlacesServiceStatus.OK) {
+                    // Check if within perimiter
+                    var eligible = google.maps.geometry.poly.containsLocation(results[0].geometry.location, deliveryPerimiter)
+                    console.log('Found location', results[0], 'eligible: ' + eligible);
+                    if (eligible) {
+                        console.log('Order shipping address is valid!');
+                        return actions.resolve();
+                    } else {
+                        console.log('Order shipping address is NOT valid.');
+                        return actions.reject();
+                    }
+                }
+            });
+        } else {
+            console.log('Order for pickup, skipping address check');
+        }
+        return actions.resolve();
+    }
 
     // MAIN
 
