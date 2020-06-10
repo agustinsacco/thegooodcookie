@@ -12,9 +12,6 @@ jQuery(window).on('load', function () {
             type: 'Nutella Chocolate',
         },
         {
-            type: 'Birthday Cake',
-        },
-        {
             type: 'Dark Chocolate',
         },
         {
