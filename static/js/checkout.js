@@ -9,7 +9,7 @@ jQuery(window).on('load', function () {
             type: 'White Chocolate',
         },
         {
-            type: 'Nutella Chocolate',
+            type: 'Dulce de Leche',
         },
         {
             type: 'Dark Chocolate',
