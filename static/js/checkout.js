@@ -57,6 +57,10 @@ jQuery(window).on('load', function () {
 
     // Helpers
 
+    function getCookiePrices() {
+        
+    }
+
     function getFormItems(data) {
         let items = [];
         for (let item of data) {
