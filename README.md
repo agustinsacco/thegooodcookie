@@ -17,3 +17,13 @@ jpegoptim -m80 /wp-content/uploads/**/*.jpg (lossy)
 ```
 find . -type f \( -iname "*.jpg" -o -iname "*.jpeg" -iname "*.png" \) -exec jpegoptim -f --strip-all {} \;
 ```
+
+#### Paypal Test Login
+
+##### Merchant
+sb-tfbk81631365@business.example.com
+P=C(ob7!
+
+##### Buyer
+sb-adut11628494@personal.example.com
+7A(k#+fQ
