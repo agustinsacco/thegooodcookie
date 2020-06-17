@@ -58,7 +58,7 @@ jQuery(window).on('load', function () {
     // Helpers
 
     function getCookiePrices() {
-        
+
     }
 
     function getFormItems(data) {
@@ -192,8 +192,9 @@ jQuery(window).on('load', function () {
     }
 
     function getShippingCost() {
-        return !isForPickup() ? shippingCost: 0
+        return !isForPickup() ? shippingCost : 0
     }
+
 
     function getDescription() {
         return `Delivery date: ${$('.delivery-date').val()} | Notes: ${$('.instructions').val()}`;
@@ -381,16 +382,33 @@ jQuery(window).on('load', function () {
     // Add the first group by default
     addFormGroup();
 
-    // Testing
+    // Init sheets
+    function handleClientLoad() {
+        console.log('reached here');
+        gapi.load('client:auth2', initClient);
+    }
+    
+    function initClient() {
+        console.log('reached here');
 
-    let newTotals = getFlatLineItems([
-        { type: "White Chocolate", dozens: "0.5" },
-        { type: "Dulce de Leche", dozens: "1" },
-
-        { type: "Milk Chocolate", dozens: "1" },
-        { type: "Dulce de Leche", dozens: "0.5" },
-        { type: "KitKat", dozens: "1" },
-        { type: "M & M", dozens: "0.5" },
-
-    ]);
+        var CLIENT_ID = 'AIzaSyCIeEMZzEPCliilY-9N8AHTD4JsYvvwtxE';
+        var API_KEY = '1057333070884-i54im4vrkhfa0pb6dabfhvj0ld386c4e.apps.googleusercontent.com';
+        var DISCOVERY_DOCS = ["https://sheets.googleapis.com/$discovery/rest?version=v4"];
+        var SCOPES = "https://www.googleapis.com/auth/spreadsheets.readonly";
+        gapi.client.init({
+            apiKey: API_KEY,
+            clientId: CLIENT_ID,
+            discoveryDocs: DISCOVERY_DOCS,
+            scope: SCOPES
+        }).then(function () {
+            // Listen for sign-in state changes.
+            gapi.client.sheets.spreadsheets.values.get({
+                spreadsheetId: '1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms',
+                // range: 'Class Data!A2:E',
+            }).then(function (response) {
+            }, function (error) {
+                console.log(error)
+            });
+        });
+    }
 });

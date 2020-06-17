@@ -57,7 +57,7 @@
 
     <table class="order-breakdown">
     </table>
-    
+
     <div class="form-errors"></div>
     <div id="paypal-button-container"></div>
 </div>
@@ -72,9 +72,12 @@
         initMap();
     }
 </script>
+
 <script async defer type="text/javascript"
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyChBjfYOFaKe62rBUpayEbj0H4L-Vewq5I&libraries=places&callback=init"></script>
 <script type="text/javascript" src="{{"js/checkout.js" | relURL}}"></script>
+<script async defer src="https://apis.google.com/js/api.js" onload="handleClientLoad()"></script>
+
 {{ end }}
 
 {{- partial "footer.html" . -}}
