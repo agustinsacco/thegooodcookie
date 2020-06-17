@@ -58,7 +58,7 @@ jQuery(window).on('load', function () {
     // Helpers
 
     function getCookiePrices() {
-        
+
     }
 
     function getFormItems(data) {
@@ -192,7 +192,7 @@ jQuery(window).on('load', function () {
     }
 
     function getShippingCost() {
-        return !isForPickup() ? shippingCost: 0
+        return !isForPickup() ? shippingCost : 0
     }
 
     function getDescription() {
@@ -224,6 +224,7 @@ jQuery(window).on('load', function () {
 
     function updateTotalBreakdown() {
         let order = getOrder();
+        const orderTotal = order.total + getShippingCost();
         $('.order-breakdown').empty();
         for (const item of order.lineItems) {
             $('.order-breakdown').append(`
@@ -235,11 +236,22 @@ jQuery(window).on('load', function () {
                 </tr>
             `);
         }
+        if (!isForPickup()) {
+            $('.order-breakdown').append(`
+            <tr>
+                <td>Delivery fee</td>
+                <td align="right">
+                    <div>$${shippingCost}</div>
+                </td>
+            </tr>
+        `);
+        }
+
         $('.order-breakdown').append(`
             <tr class="margin-top-20">
                 <td>TOTAL</td>
                 <td align="right">
-                    <div>$${order.total}</div>
+                    <div>$${orderTotal}</div>
                 </td>
             </tr>
         `);
