@@ -17,13 +17,6 @@ jQuery(window).on('load', function () {
             }
         },
         {
-            type: 'Dulce de Leche',
-            prices: {
-                halfDozen: 10,
-                fullDozen: 15
-            }
-        },
-        {
             type: 'Dark Chocolate',
             prices: {
                 halfDozen: 10,
@@ -32,13 +25,6 @@ jQuery(window).on('load', function () {
         },
         {
             type: 'M & M',
-            prices: {
-                halfDozen: 10,
-                fullDozen: 15
-            }
-        },
-        {
-            type: 'KitKat',
             prices: {
                 halfDozen: 10,
                 fullDozen: 15
