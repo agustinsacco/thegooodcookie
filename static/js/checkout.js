@@ -39,7 +39,7 @@ jQuery(window).on('load', function () {
         },
     ];
     let shippingCost = 3;
-
+    console.log(cookies);
 
     // Helpers
 
@@ -378,17 +378,4 @@ jQuery(window).on('load', function () {
 
     // Add the first group by default
     addFormGroup();
-
-    // Testing
-
-    let newTotals = getFlatLineItems([
-        { type: "White Chocolate", dozens: "0.5" },
-        { type: "Dulce de Leche", dozens: "1" },
-
-        { type: "Milk Chocolate", dozens: "1" },
-        { type: "Dulce de Leche", dozens: "0.5" },
-        { type: "KitKat", dozens: "1" },
-        { type: "M & M", dozens: "0.5" },
-
-    ]);
 });
