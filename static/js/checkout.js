@@ -37,15 +37,32 @@ jQuery(window).on('load', function () {
                 fullDozen: 20
             }
         },
+        {
+            type: 'Double Dark Chocolate',
+            prices: {
+                halfDozen: 12,
+                fullDozen: 18
+            }
+        },
+        {
+            type: 'Double Dark White Chocolate',
+            prices: {
+                halfDozen: 12,
+                fullDozen: 18
+            }
+        },
+        {
+            type: 'Brownie Cookie',
+            prices: {
+                halfDozen: 15,
+                fullDozen: 22
+            }
+        }
     ];
     let shippingCost = 3;
     console.log(cookies);
 
     // Helpers
-
-    function getCookiePrices() {
-
-    }
 
     function getFormItems(data) {
         let items = [];
@@ -242,7 +259,7 @@ jQuery(window).on('load', function () {
             </tr>
         `);
     }
-
+    console.log(paypal);
     paypal.Buttons({
         createOrder: function (data, actions) {
             // This function sets up the details of the transaction, including the amount and line item details.
@@ -278,6 +295,7 @@ jQuery(window).on('load', function () {
             } else {
                 $('.form-errors').html('');
             }
+            console.log(body);
             return actions.order.create(body);
         },
         onApprove: function (data, actions) {
