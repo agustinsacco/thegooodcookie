@@ -133,6 +133,7 @@ footer {
 .checkout-wrapper table {
 	width: 100%;
 	margin-bottom: 20px;
+	font-size: 20px;
 }
 
 .checkout-wrapper h1 {
@@ -143,6 +144,12 @@ footer {
 .checkout-wrapper h2, h3, h4, h5 {
 	font-family: 'Open Sans', sans-serif;
 	text-transform: uppercase;
+}
+
+.checkout-wrapper .form-group {
+	position: relative;
+	border: 2px solid rgb(85, 85, 85);
+	padding: 20px;
 }
 
 .checkout-wrapper .divider {
@@ -171,6 +178,13 @@ footer {
 	/* padding: 15px; */
 	background-color: transparent;
 	border: 2px solid rgb(49, 49, 49);
+}
+
+.checkout-wrapper .remove-group {
+	position: absolute;
+	cursor: pointer;
+	top: -15px;
+	right: -15px;
 }
 
 #map {

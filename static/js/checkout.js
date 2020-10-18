@@ -60,7 +60,6 @@ jQuery(window).on('load', function () {
         }
     ];
     let shippingCost = 3;
-    console.log(cookies);
 
     // Helpers
 
@@ -77,7 +76,7 @@ jQuery(window).on('load', function () {
         }
 
         // Remove any items that 
-        let finalItems = items.filter(function (item) {
+        let finalItems = items.filter((item) => {
             if (item.type && item.dozens) {
                 return {
                     type: item.type,
@@ -141,6 +140,21 @@ jQuery(window).on('load', function () {
         const halfDozens = [];
         const lineItems = [];
 
+        // Sort form items by half dozen price to group properly later.
+        formItems.sort((a, b) => {
+            const aCookie = getCookieDetails(a.type);
+            const bCookie = getCookieDetails(b.type);
+            if (aCookie.prices.halfDozen < bCookie.prices.halfDozen) {
+                return -1;
+            }
+            if (aCookie.prices.halfDozen > bCookie.prices.halfDozen) {
+                return 1;
+            }
+            // a must be equal to b
+            return 0;
+        });
+
+        // Lets first order by half dozen price to help grouping later
         for (let item of formItems) {
             switch (item.dozens) {
                 case '0.5': halfDozens.push(item); break;
@@ -161,6 +175,7 @@ jQuery(window).on('load', function () {
         }
 
         // Flatten half dozens into dozens
+        // If possible, flatten by type
         while (halfDozens.length > 0) {
             // If last one
             if (halfDozens.length === 1) {
@@ -213,6 +228,7 @@ jQuery(window).on('load', function () {
         }
         $('.checkout-form').append(`
             <div class="form-group margin-bottom-20">
+                <div class="remove-group"><img src="/img/close.png" /></div>
                 <select name="dozens-${count}" class="quantity-select margin-bottom-20">
                     <option disabled selected>Quantity</option>
                     <option value="0.5">1/2 Dozen</option>
@@ -259,7 +275,7 @@ jQuery(window).on('load', function () {
             </tr>
         `);
     }
-    console.log(paypal);
+
     paypal.Buttons({
         createOrder: function (data, actions) {
             // This function sets up the details of the transaction, including the amount and line item details.
@@ -287,9 +303,8 @@ jQuery(window).on('load', function () {
                     description: getDescription(),
                 }],
             };
-
             // If order 
-            if (order.total === 0 && order.items.length === 0) {
+            if (order.total === 0 || order.lineItems.length === 0) {
                 $('.form-errors').html('<h3>Please add some cookies to your order.</h3>');
                 return false;
             } else {
@@ -389,6 +404,11 @@ jQuery(window).on('load', function () {
 
     $('.tip').change(function () {
         updateTotalBreakdown();
+    });
+
+    // Handle form group removal
+    $('.checkout-form').on('click', '.remove-group', function() {
+        $(this).parent('.form-group').remove()
     });
 
     // Set today as default delivery date
