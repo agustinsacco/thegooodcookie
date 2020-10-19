@@ -51,7 +51,7 @@ footer {
 
 .box {
 	position: relative;
-	padding: 20px;
+	padding: 15px;
 	margin-bottom: 20px;
 	height: auto;
 	width: 100%;
@@ -121,7 +121,7 @@ footer {
 }
 
 .checkout-wrapper {
-	padding: 40px 20px 40px 20px;
+	padding: 40px 15px 40px 15px;
 	margin: 0 auto;
 }
 
@@ -149,8 +149,8 @@ footer {
 
 .checkout-wrapper .form-group {
 	position: relative;
-	border: 2px solid rgb(85, 85, 85);
-	padding: 20px;
+	border: 2px solid rgb(49, 49, 49);
+	padding: 18px;
 }
 
 .checkout-wrapper .divider {
