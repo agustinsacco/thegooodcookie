@@ -194,8 +194,19 @@ function initMap() {
         { lat: 45.434099, lng: -73.583923 },
     ];
 
+    var trangleCoordsNew = [
+        { lat: 45.414894, lng: -73.621045 },
+        { lat: 45.415615, lng: -73.609048 },
+        { lat: 45.455064, lng: -73.562734 },
+        { lat: 45.471182, lng: -73.557571 },
+        { lat: 45.477426, lng: -73.540407 },
+        { lat: 45.520499, lng: -73.546527 },
+        { lat: 45.554688, lng: -73.621043 },
+        { lat: 45.473332, lng: -73.706590 },
+    ]
+
     deliveryPerimiter = new google.maps.Polygon({
-        paths: triangleCoords,
+        paths: trangleCoordsNew,
         strokeColor: 'grey',
         strokeOpacity: 0.5,
         strokeWeight: 1,

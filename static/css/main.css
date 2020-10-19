@@ -85,6 +85,7 @@ footer {
 
 .menu-item {
 	position: relative;
+	text-transform: uppercase;
 	padding: 10px;
 }
 
@@ -126,7 +127,7 @@ footer {
 
 @media (min-width: 750px) {
 	.checkout-wrapper {
-		width: 50%;
+		max-width: 600pxf;
 	}
 }
 
@@ -154,7 +155,7 @@ footer {
 
 .checkout-wrapper .divider {
 	width: 100%;
-	border-bottom: 2px solid rgb(49, 49, 49);
+	border-bottom: 2px solid rgmaxb(49, 49, 49);
 	margin-bottom: 20px;
 	height: 0;
 }
@@ -228,8 +229,16 @@ footer {
 }
 
 .autocomplete-wrapper {
-	width: 80%;
+	width: 100%;
+	max-width: 600px;
 	margin: 0 auto;
+	padding-right: 20px;
+	padding-left: 20px;
+	background-color: transparent;
+}
+
+.autocomplete-wrapper .autocomplete {
+	background-color: white;
 }
 
 /*------------------------------
